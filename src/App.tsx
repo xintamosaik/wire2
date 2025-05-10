@@ -33,7 +33,7 @@ function App() {
         saveToLocalStorage(nodes)
         
       }}>Save</button>
-
+      <output style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
       {nodes.map((node) => (
         <div key={node.id} className="node">
 
@@ -42,6 +42,7 @@ function App() {
           <p>Connections: {node.connections.join(', ')}</p>
         </div>
       ))}
+      </output>
       <button onClick={() => setNodes([...nodes, { id: getUUID(), label: `unnamed`, connections: [] }])}>
         Add Node
       </button>
