@@ -31,11 +31,15 @@ function getUUID() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
 
-
+const emptyNode: Node = {
+  id: getUUID(),
+  label: 'unnamed',
+  connections: new Set(),
+}
 const initialNodes: Node[] = [
-  { id: getUUID(), label: 'unnamed', connections: new Set() },
-  { id: getUUID(), label: 'unnamed', connections: new Set() },
-  { id: getUUID(), label: 'unnamed', connections: new Set() },
+  emptyNode,
+  emptyNode,
+  emptyNode,
 ]
 function App() {
   const [nodes, setNodes] = useState<Node[]>(loadFromLocalStorage().length ? loadFromLocalStorage() : initialNodes)
@@ -54,7 +58,7 @@ function App() {
           setNodes([])
         }}>Clear</button>
 
-        <button onClick={() => setNodes([...nodes, { id: getUUID(), label: `unnamed`, connections: new Set() }])}>
+        <button onClick={() => setNodes([...nodes, emptyNode ])}>
           Add Node
         </button>
 
