@@ -29,23 +29,27 @@ function App() {
   return (
     <>
       <h1>Wire2</h1>
-      <button onClick={() => {
-        saveToLocalStorage(nodes)
-        
-      }}>Save</button>
-      <output style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-      {nodes.map((node) => (
-        <div key={node.id} className="node">
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+        <button onClick={() => {
+          saveToLocalStorage(nodes)
 
-          <h2>{node.label}</h2>
-          <h3>{node.id}</h3>
-          <p>Connections: {node.connections.join(', ')}</p>
-        </div>
-      ))}
+        }}>Save</button>
+        <button onClick={() => setNodes([...nodes, { id: getUUID(), label: `unnamed`, connections: [] }])}>
+          Add Node
+        </button>
+      </div>
+
+      <output style={{ display: 'grid', gap: '1rem', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr' }}>
+        {nodes.map((node) => (
+          <div key={node.id} className="node" style={{ fontFamily: "monospace", border: '1px solid white', padding: '1rem', borderRadius: '5px' }}>
+
+            <h2>{node.label}</h2>
+            <h3>{node.id}</h3>
+            <p>Connections: {node.connections.join(', ')}</p>
+          </div>
+        ))}
       </output>
-      <button onClick={() => setNodes([...nodes, { id: getUUID(), label: `unnamed`, connections: [] }])}>
-        Add Node
-      </button>
+
 
     </>
   )
