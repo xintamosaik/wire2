@@ -100,7 +100,7 @@ function App() {
       <br />
 
       <h1>List</h1>
-      
+
       <h2>Filters</h2>
       <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
         <button onClick={() => setFilter("disconnected")}>Disconnected</button>
