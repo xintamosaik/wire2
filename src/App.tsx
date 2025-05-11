@@ -126,7 +126,7 @@ function NodeCard(
   return (
     <div className="node" style={style} onClick={() => onMark(node.id)}>
       <h2 style={{color: borderColor}}>{node.id}</h2>
-      { disconnected ? <h3 style={{ color: 'grey'}}> Disconnected</h3> :
+      { disconnected ? <h3 style={{ color: 'grey'}}> No connections</h3> :
         <h3 style={{ color: 'green' }}>
           {connections} connections
         </h3>
