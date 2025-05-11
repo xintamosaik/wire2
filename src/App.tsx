@@ -1,64 +1,64 @@
 import './App.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
 interface Node {
   id: string
   label: string
   connections: Set<string>
 }
+
 function saveToLocalStorage(nodes: Node[]) {
   const converted = nodes.map(node => ({
     ...node,
     connections: Array.from(node.connections),
   }))
+
   localStorage.setItem('nodes', JSON.stringify(converted))
-  console.log("saved to local storage")
 }
 
-function loadFromLocalStorage(): Node[] {
+function LocalNodes(): Node[] {
   const nodes = localStorage.getItem('nodes')
-  if (nodes) {
-     return JSON.parse(nodes).map((node: Node) => ({
-      ...node,
-      connections: node.connections ? new Set<string>(node.connections) : new Set<string>(),
-    }));
+  if (!nodes) {
+    return []
   }
-  return []
+
+  return JSON.parse(nodes).map((node: Node) => ({
+    ...node,
+    connections: node.connections ? new Set<string>(node.connections) : new Set<string>(),
+  })); 
 }
-function clearLocalStorage() {
-  localStorage.removeItem('nodes')
-}
-function getUUID() {
+
+function UUID() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
 
-const emptyNode: Node = {
-  id: getUUID(),
-  label: 'unnamed',
-  connections: new Set(),
+function createEmptyNode(): Node {
+  return {
+    id: UUID(),
+    label: 'unnamed',
+    connections: new Set(),
+  }
 }
-const initialNodes: Node[] = [
-  emptyNode,
-  emptyNode,
-  emptyNode,
-]
+
 function App() {
-  const [nodes, setNodes] = useState<Node[]>(loadFromLocalStorage().length ? loadFromLocalStorage() : initialNodes)
+  const [nodes, setNodes] = useState<Node[]>(LocalNodes().length ? LocalNodes() : [])
+  
+  useEffect(() => { 
+    saveToLocalStorage(nodes);
+  }, [nodes]);
+  
   const [markedNode, setMarkedNode] = useState<string | null>(null)
+
   return (
     <>
       <h1>Wire2</h1>
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+    
         <button onClick={() => {
-          saveToLocalStorage(nodes)
-
-        }}>Save</button>
-
-        <button onClick={() => {
-          clearLocalStorage()
           setNodes([])
         }}>Clear</button>
 
-        <button onClick={() => setNodes([...nodes, emptyNode ])}>
+        <button onClick={() => setNodes([...nodes, createEmptyNode()])}>
           Add Node
         </button>
 
@@ -92,8 +92,9 @@ function App() {
                   entry.connections.add(node.id)
                 }
               })
+
+              setNodes([...nodes])
               setMarkedNode(null)
-              console.log(node.id)
             }}>
               mark for connection
             </button>
