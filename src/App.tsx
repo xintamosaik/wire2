@@ -111,7 +111,12 @@ function NodeCard(
     onMark: (id: string) => void
   }
 ) {
-  const borderColor = markedNode === node.id ? 'red' : 'white'
+  const connections = node.connections.size
+  const disconnected = connections === 0
+  console.log('connections', connections)
+  console.log('hasConnections', disconnected)
+  const activeColor = disconnected ? 'grey' : 'white'
+  const borderColor = markedNode === node.id ? 'yellow' : activeColor
   const style = {
     fontFamily: "monospace",
     border: '1px solid ' + borderColor,
@@ -119,10 +124,14 @@ function NodeCard(
     borderRadius: '5px'
   }
   return (
-    <div key={node.id} className="node" style={style} onClick={() => onMark(node.id)}>
-      <h2>{node.id}</h2>
-      <h3>{node.connections.size === 0 ? "Disconnected" : "Connections"}</h3>
-       
+    <div className="node" style={style} onClick={() => onMark(node.id)}>
+      <h2 style={{color: borderColor}}>{node.id}</h2>
+      { disconnected ? <h3 style={{ color: 'grey'}}> Disconnected</h3> :
+        <h3 style={{ color: 'green' }}>
+          {connections} connections
+        </h3>
+      }
+
       <ul>
         {Array.from(node.connections).map((connection) => (
           <li key={"li_" + connection}>{connection}</li>
