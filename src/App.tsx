@@ -1,64 +1,86 @@
-import "./App.css";
-import { useState, useEffect } from "react";
+import './App.css'
+import { useState, useEffect } from 'react'
 
 interface Node {
-  id: string;
-  label: string;
-  connections: Set<string>;
+  id: string
+  label: string
+  connections: Set<string>
 }
 
 function saveNodesToLocalStorage(nodes: Node[]) {
-  const converted = nodes.map((node) => ({
+  const converted = nodes.map(node => ({
     ...node,
     connections: Array.from(node.connections),
-  }));
+  }))
 
-  localStorage.setItem("nodes", JSON.stringify(converted));
+  localStorage.setItem('nodes', JSON.stringify(converted))
 }
 
 function getLocalNodes(): Node[] {
-  const nodes = localStorage.getItem("nodes");
+
+  const nodes = localStorage.getItem('nodes')
   if (!nodes) {
-    return [];
+    return []
   }
 
   return JSON.parse(nodes).map((node: Node) => ({
     ...node,
-    connections: node.connections
-      ? new Set<string>(node.connections)
-      : new Set<string>(),
+    connections: node.connections ? new Set<string>(node.connections) : new Set<string>(),
   }));
 }
 
 function generateUUID() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2);
+  return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
 
 function createEmptyNode(): Node {
   return {
     id: generateUUID(),
-    label: "unnamed",
+    label: 'unnamed',
     connections: new Set(),
-  };
+  }
 }
 
 function App() {
-  const [nodes, setNodes] = useState<Node[]>(getLocalNodes());
-  const [markedNode, setMarkedNode] = useState<string | null>(null);
+
+  const [nodes, setNodes] = useState<Node[]>(getLocalNodes())
+  const [markedNode, setMarkedNode] = useState<string | null>(null)
 
   useEffect(() => {
     saveNodesToLocalStorage(nodes);
   }, [nodes]);
 
+  function handleMark(id: string) {
+    if (!markedNode) {
+      setMarkedNode(id)
+      return;
+    }
+
+    if (markedNode === id) {
+      setMarkedNode(null)
+      return;
+    }
+
+    const updated = nodes.map((entry) => {
+      if (markedNode === entry.id) {
+        return {
+          ...entry,
+          connections: new Set([...entry.connections, id]),
+        }
+      }
+      return entry
+    })
+
+    setNodes(updated)
+    setMarkedNode(null)
+  }
+
   return (
     <>
       <h1>Wire2</h1>
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-        <button
-          onClick={() => {
-            setNodes([]);
-          }}
-        >
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+
+        <button onClick={() => setNodes([])}>
           Clear
         </button>
 
@@ -68,79 +90,46 @@ function App() {
 
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gap: "1rem",
-          gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
-        }}
-      >
+      <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr' }}>
         {nodes.map((node) => (
           <NodeCard
             key={node.id}
             node={node}
             markedNode={markedNode}
-            onMark={(id) => {
-              if (!markedNode) {
-                setMarkedNode(id);
-                return;
-              }
-
-              if (markedNode === id) {
-                setMarkedNode(null);
-                return;
-              }
-
-              const updated = nodes.map((entry) => {
-                if (markedNode === entry.id) {
-                  return {
-                    ...entry,
-                    connections: new Set([...entry.connections, id]),
-                  };
-                }
-                return entry;
-              });
-
-              setNodes(updated);
-              setMarkedNode(null);
-            }}
+            onMark={handleMark}
           ></NodeCard>
         ))}
       </div>
     </>
-  );
+  )
 }
 
-function NodeCard({
-  node,
-  markedNode,
-  onMark,
-}: {
-  node: Node;
-  markedNode: string | null;
-  onMark: (id: string) => void;
-}) {
-  const borderColor = markedNode === node.id ? "red" : "white";
+function NodeCard(
+  { node, markedNode, onMark }: {
+    node: Node
+    markedNode: string | null
+    onMark: (id: string) => void
+  }
+) {
+  const borderColor = markedNode === node.id ? 'red' : 'white'
   const style = {
     fontFamily: "monospace",
-    border: "1px solid " + borderColor,
-    padding: "1rem",
-    borderRadius: "5px",
-  };
+    border: '1px solid ' + borderColor,
+    padding: '1rem',
+    borderRadius: '5px'
+  }
   return (
-    <div key={node.id} className="node" style={style}>
+    <div key={node.id} className="node" style={style} onClick={() => onMark(node.id)}>
       <h2>{node.id}</h2>
-      <h3>Connections</h3>
-
-      <button onClick={() => onMark(node.id)}>mark for connection</button>
-
+      <h3>{node.connections.size === 0 ? "Disconnected" : "Connections"}</h3>
+       
       <ul>
-        {node.connections.size === 0 ? <li>no connections</li> : null}
         {Array.from(node.connections).map((connection) => (
           <li key={"li_" + connection}>{connection}</li>
         ))}
       </ul>
     </div>
-  );
+  )
+
 }
-export default App;
+export default App
