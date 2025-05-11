@@ -62,7 +62,6 @@ function App() {
           Add Node
         </button>
 
-
         <output id="currentlyMarkedNodes">
           {markedNode ? `Currently marked node: ${markedNode}` : 'No node marked'}
         </output>
@@ -71,7 +70,6 @@ function App() {
       <output style={{ display: 'grid', gap: '1rem', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr' }}>
         {nodes.map((node) => (
           <div key={node.id} className="node" style={{ fontFamily: "monospace", border: '1px solid white', padding: '1rem', borderRadius: '5px' }}>
-
 
             <h2>{node.id}</h2>
             <h3>Connections</h3>
@@ -92,17 +90,11 @@ function App() {
                   console.log("found marked node")
                   console.log(entry)
                   entry.connections.add(node.id)
-
                 }
-
               })
-
-
               setMarkedNode(null)
               console.log(node.id)
-
             }}>
-
               mark for connection
             </button>
             <ul>
@@ -113,11 +105,7 @@ function App() {
             </ul>
           </div>
         ))}
-
       </output>
-
-
-
     </>
   )
 }
