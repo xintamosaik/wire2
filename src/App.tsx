@@ -7,7 +7,7 @@ interface Node {
   connections: Set<string>
 }
 
-function saveToLocalStorage(nodes: Node[]) {
+function saveNodesToLocalStorage(nodes: Node[]) {
   const converted = nodes.map(node => ({
     ...node,
     connections: Array.from(node.connections),
@@ -17,6 +17,7 @@ function saveToLocalStorage(nodes: Node[]) {
 }
 
 function getLocalNodes(): Node[] {
+
   const nodes = localStorage.getItem('nodes')
   if (!nodes) {
     return []
@@ -25,7 +26,7 @@ function getLocalNodes(): Node[] {
   return JSON.parse(nodes).map((node: Node) => ({
     ...node,
     connections: node.connections ? new Set<string>(node.connections) : new Set<string>(),
-  })); 
+  }));
 }
 
 function generateUUID() {
@@ -41,19 +42,19 @@ function createEmptyNode(): Node {
 }
 
 function App() {
-  const [nodes, setNodes] = useState<Node[]>(getLocalNodes().length ? getLocalNodes() : [])
-  
-  useEffect(() => { 
-    saveToLocalStorage(nodes);
-  }, [nodes]);
-  
+
+  const [nodes, setNodes] = useState<Node[]>(getLocalNodes())
   const [markedNode, setMarkedNode] = useState<string | null>(null)
+
+  useEffect(() => {
+    saveNodesToLocalStorage(nodes);
+  }, [nodes]);
 
   return (
     <>
       <h1>Wire2</h1>
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
-    
+
         <button onClick={() => {
           setNodes([])
         }}>Clear</button>
@@ -62,12 +63,12 @@ function App() {
           Add Node
         </button>
 
-        <output id="currentlyMarkedNodes">
+        <div id="currentlyMarkedNodes">
           {markedNode ? `Currently marked node: ${markedNode}` : 'No node marked'}
-        </output>
+        </div>
       </div>
 
-      <output style={{ display: 'grid', gap: '1rem', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr' }}>
+      <div style={{ display: 'grid', gap: '1rem', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr' }}>
         {nodes.map((node) => (
           <div key={node.id} className="node" style={{ fontFamily: "monospace", border: '1px solid white', padding: '1rem', borderRadius: '5px' }}>
 
@@ -85,15 +86,17 @@ function App() {
                 return;
               }
 
-              nodes.forEach((entry) => {
+              const updated = nodes.map((entry) => {
                 if (markedNode === entry.id) {
-                  console.log("found marked node")
-                  console.log(entry)
-                  entry.connections.add(node.id)
+                  return {
+                    ...entry,
+                    connections: new Set([...entry.connections, node.id]),
+                  }
                 }
+                return entry
               })
 
-              setNodes([...nodes])
+              setNodes(updated)
               setMarkedNode(null)
             }}>
               mark for connection
@@ -106,7 +109,7 @@ function App() {
             </ul>
           </div>
         ))}
-      </output>
+      </div>
     </>
   )
 }
