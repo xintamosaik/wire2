@@ -113,8 +113,7 @@ function NodeCard(
 ) {
   const connections = node.connections.size
   const disconnected = connections === 0
-  console.log('connections', connections)
-  console.log('hasConnections', disconnected)
+ 
   const activeColor = disconnected ? 'grey' : 'white'
   const borderColor = markedNode === node.id ? 'yellow' : activeColor
   const style = {
