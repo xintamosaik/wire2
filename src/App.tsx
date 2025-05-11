@@ -16,7 +16,7 @@ function saveToLocalStorage(nodes: Node[]) {
   localStorage.setItem('nodes', JSON.stringify(converted))
 }
 
-function LocalNodes(): Node[] {
+function getLocalNodes(): Node[] {
   const nodes = localStorage.getItem('nodes')
   if (!nodes) {
     return []
@@ -28,20 +28,20 @@ function LocalNodes(): Node[] {
   })); 
 }
 
-function UUID() {
+function generateUUID() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2)
 }
 
 function createEmptyNode(): Node {
   return {
-    id: UUID(),
+    id: generateUUID(),
     label: 'unnamed',
     connections: new Set(),
   }
 }
 
 function App() {
-  const [nodes, setNodes] = useState<Node[]>(LocalNodes().length ? LocalNodes() : [])
+  const [nodes, setNodes] = useState<Node[]>(getLocalNodes().length ? getLocalNodes() : [])
   
   useEffect(() => { 
     saveToLocalStorage(nodes);
