@@ -41,12 +41,17 @@ function createEmptyNode(): Node {
   };
 }
 
+function nodeIsConnected(nodes: Node  [], id: string) {
+  return nodes.some((node) => node.connections.has(id));
+}
+
+
 function filterNodes(filter: string, nodes: Node[]) {
   if (filter === "disconnected") {
-    return nodes.filter((node) => node.connections.size === 0);
-  }
+    return nodes.filter((node) => node.connections.size === 0 && !nodeIsConnected (nodes, node.id));
+   }
   if (filter === "connected") {
-    return nodes.filter((node) => node.connections.size > 0);
+    return nodes.filter((node) => node.connections.size > 0 || nodeIsConnected (nodes, node.id));
   }
   return nodes;
 }
