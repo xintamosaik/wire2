@@ -64,7 +64,7 @@ function trackGraphFromId(
   if (!node) {
     return {};
   }
-  
+
 
   const incoming = new Set<string>();
   nodes.forEach((node) => {
@@ -72,7 +72,7 @@ function trackGraphFromId(
       incoming.add(node.id);
     }
   });
-    
+
   return {
     id: node.id,
     incoming: incoming,
@@ -84,7 +84,7 @@ function App() {
   const [nodes, setNodes] = useState<Node[]>(getLocalNodes());
   const [markedNode, setMarkedNode] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("all");
-  
+
 
 
   useEffect(() => {
@@ -94,8 +94,10 @@ function App() {
   const filteredNodes = filterNodes(filter, nodes);
   const invalidNodes = new Set<string>();
   const connectedNodes = new Set<string>();
+  const outgoingOnly = new Set<string>();
+  const incomingOnly = new Set<string>();
   const disconnectedNodes = new Set<string>();
-   const graphs = []
+  const graphs = []
   const trackedNodes = new Set<string>();
   nodes.forEach((node) => {
     const inGraph = trackGraphFromId(nodes, node.id);
@@ -105,6 +107,12 @@ function App() {
     }
     const hasOutgoing = inGraph.outgoing && inGraph.outgoing.size > 0;
     const hasIncoming = inGraph.incoming && inGraph.incoming.size > 0;
+
+    if (hasOutgoing && !hasIncoming) {
+      outgoingOnly.add(node.id);
+    } else if (!hasOutgoing && hasIncoming) {
+      incomingOnly.add(node.id);
+    }
     const isConnected = hasOutgoing || hasIncoming;
     if (!isConnected) {
       disconnectedNodes.add(node.id);
@@ -112,15 +120,40 @@ function App() {
     }
 
     connectedNodes.add(node.id);
+    Array.from(outgoingOnly).forEach((id) => {
+      const node = nodes.find((node) => node.id === id);
+      if (!node) {
+        invalidNodes.add(id);
+        return;
+      }
+      trackedNodes.add(id);
+      console.log(node)
 
-    
-    
-    
+      const graph = {
+        start: node,
+        next: node.connections
+      }
+
+      graphs.push(graph);
+
+
+
+    })
+
+
+
+
   });
- 
-  console.log(`invalidNodes: ${Array.from(invalidNodes).join(", ")} connectedNodes: ${Array.from(connectedNodes).join(", ")} disconnectedNodes: ${Array.from(disconnectedNodes).join(", ")}`)
 
-    
+
+  console.groupCollapsed("Graphs");
+  console.log("invalidNodes", invalidNodes);
+  console.log("connectedNodes", connectedNodes);
+  console.log("outgoingOnly", outgoingOnly);
+  console.log("incomingOnly", incomingOnly);
+  console.log("disconnectedNodes", disconnectedNodes);
+  console.groupEnd();
+
   function handleMark(id: string) {
     if (!markedNode) {
       setMarkedNode(id);
