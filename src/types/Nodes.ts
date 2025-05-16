@@ -22,9 +22,13 @@ function getLocalNodes(): Node[] {
             : new Set<string>(),
     }));
 }
-
+// We want very short UUIDs, let's just use the timestamp and generate a 4 digit alphanumeric string
 function generateUUID() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2);
+    return (
+           Date.now().toString(36).substring(2, 6) +
+        Math.random().toString(36).substring(2, 6)
+     
+    ).toUpperCase();
 }
 
 function createEmptyNode(): Node {
