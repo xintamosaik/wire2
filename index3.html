@@ -132,16 +132,20 @@
                 y: ROOT_Y,
             }
         }
+
+               // ...existing code...
+        const multiplier = Math.floor((n - 2) / 4) + 1;
+        // ...existing code...
            
         const verticalAlignment = (n % 4 === 0 || n % 4 === 1) ? "top" : "bottom";
 
         console.log(verticalAlignment, side);
-        const y = verticalAlignment === "top" ? ROOT_Y - MARGIN_BOX_TO_BOX * 1 : ROOT_Y + MARGIN_BOX_TO_BOX * 1;
+        const y = verticalAlignment === "top" ? ROOT_Y - MARGIN_BOX_TO_BOX * multiplier : ROOT_Y + MARGIN_BOX_TO_BOX * multiplier;
         return { x, y };
     }
 
         const letters = [
-            "A", "B", "C", "D", "E", 
+             "B", "C", "D", "E", 
             "F", "G", "H", "I", "J",
             "K", "L", "M", "N", "O",
             "P", "Q", "R", "S", "T",
