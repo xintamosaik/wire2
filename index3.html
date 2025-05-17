@@ -85,21 +85,16 @@
 
       const startNode = "A";
       const nodes = [
-        { id: "A", next: new Set(["B", "C"]) },
-        { id: "B", next: new Set(["D", "E"]) },
-        { id: "C", next: new Set(["E", "F"]) },
-        { id: "D", next: new Set(["G"]) },
-        { id: "E", next: new Set(["G"]) },
+        { id: "A", next: new Set(["B", "C", "D", "E"]) },
+        { id: "B", next: new Set(["G", "H"]) },
+        { id: "C", next: new Set(["I", "J"]) },
+        { id: "D", next: new Set(["K", "L"]) },
+        { id: "E", next: new Set(["E"]) },
         { id: "F", next: new Set(["G"]) },
         { id: "G", next: new Set([]) },
       ];
 
-      const firstLevelChildren = nodes.find(
-        (node) => node.id === startNode
-      ).next;
-      console.log("firstLevelChildren", firstLevelChildren);
-      const numberOfFirstLevelChildren = firstLevelChildren.size;
-      console.log("numberOfFirstLevelChildren", numberOfFirstLevelChildren);
+
       const MARGIN_FROM_ROOT = BOX_WIDTH * 2;
       const LEFT_OF_ROOT = ROOT_X - MARGIN_FROM_ROOT;
       const RIGHT_OF_ROOT = ROOT_X + MARGIN_FROM_ROOT;
@@ -147,43 +142,27 @@
         return { x, y };
       }
 
-      const letters = [
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-      ];
-      // let's test the fake radial coordinates maker
-      const n = 24;
-      for (let i = 0; i < n; i++) {
-        const next = nextFakeRadialCoordinate(i);
-        console.log("next", next);
+   
+          const firstLevelChildren = nodes.find(
+        (node) => node.id === startNode
+      ).next;
+      console.log("firstLevelChildren", firstLevelChildren);
+      const numberOfFirstLevelChildren = firstLevelChildren.size;
+      console.log("numberOfFirstLevelChildren", numberOfFirstLevelChildren);
 
-        const new_box = TextBox(next.x, next.y, letters[i]);
-        graph.appendChild(new_box.box);
-        graph.appendChild(new_box.text);
-      }
+        const firstLevelChildrenArray = Array.from(firstLevelChildren);
+        console.log("firstLevelChildrenArray", firstLevelChildrenArray);
+
+      firstLevelChildrenArray.forEach((child, index) => {
+        const coord = nextFakeRadialCoordinate(index);
+        const { x, y } = coord;
+        console.log("nextFakeRadialCoordinate", coord);
+        const childBox = TextBox(x, y, child);
+        graph.appendChild(childBox.box);
+        graph.appendChild(childBox.text);
+
+      })
+
     </script>
   </body>
 </html>
