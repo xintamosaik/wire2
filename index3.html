@@ -105,7 +105,7 @@
       const RIGHT_OF_ROOT = ROOT_X + MARGIN_FROM_ROOT;
       const MARGIN_BOX_TO_BOX = BOX_HEIGHT * 2;
 
-      const fakeRadialCoordinates = [
+      const fakeRadialCoordinateTestCases = [
         { x: LEFT_OF_ROOT, y: ROOT_Y + MARGIN_BOX_TO_BOX * 0}, // left of the root (only x and y)
         { x: RIGHT_OF_ROOT, y: ROOT_Y - MARGIN_BOX_TO_BOX * 0}, // right of the root (only x and y)
         { x: RIGHT_OF_ROOT, y: ROOT_Y + MARGIN_BOX_TO_BOX * 1 }, // below the root (only x and y)
@@ -121,92 +121,41 @@
         const odd = n % 2 === 1;
         
         // if we are 0 we are even and we would first go to the right side
-        const side = even ? "right" : "left";
-        
+        const side = odd ? "right" : "left";
+        const x = side === "left" ? LEFT_OF_ROOT : RIGHT_OF_ROOT;
         // for the first 2 nodes we stay at the same height as the root node
         const is_centered = n < 2;
         if (is_centered) {
             console.log("centered, " + side)
-            return;
+            return {
+                x: x,
+                y: ROOT_Y,
+            }
         }
            
         const verticalAlignment = (n % 4 === 0 || n % 4 === 1) ? "top" : "bottom";
 
         console.log(verticalAlignment, side);
+        const y = verticalAlignment === "top" ? ROOT_Y - MARGIN_BOX_TO_BOX * 1 : ROOT_Y + MARGIN_BOX_TO_BOX * 1;
+        return { x, y };
+    }
 
-
-      }
-      const first = TextBox(
-        fakeRadialCoordinates[0].x,
-        fakeRadialCoordinates[0].y,
-        "B"
-      );
-
-      graph.appendChild(first.box);
-      graph.appendChild(first.text);
-
-      const second = TextBox(
-        fakeRadialCoordinates[1].x,
-        fakeRadialCoordinates[1].y,
-        "C"
-      );
-
-      graph.appendChild(second.box);
-      graph.appendChild(second.text);
-
-      const third = TextBox(
-        fakeRadialCoordinates[2].x,
-        fakeRadialCoordinates[2].y,
-        "D"
-      );
-      graph.appendChild(third.box);
-      graph.appendChild(third.text);
-
-      const fourth = TextBox(
-        fakeRadialCoordinates[3].x,
-        fakeRadialCoordinates[3].y,
-        "E"
-      );
-      graph.appendChild(fourth.box);
-      graph.appendChild(fourth.text);
-
-        const fifth = TextBox(
-            fakeRadialCoordinates[4].x,
-            fakeRadialCoordinates[4].y,
-            "F"
-        );
-        graph.appendChild(fifth.box);
-        graph.appendChild(fifth.text);
-
-        const sixth = TextBox(
-            fakeRadialCoordinates[5].x,
-            fakeRadialCoordinates[5].y,
-            "G"
-        );
-        graph.appendChild(sixth.box);
-        graph.appendChild(sixth.text);
-        const seventh = TextBox(
-            fakeRadialCoordinates[6].x,
-            fakeRadialCoordinates[6].y,
-            "H"
-        );
-        graph.appendChild(seventh.box);
-        graph.appendChild(seventh.text);
-        const eighth = TextBox(
-            fakeRadialCoordinates[7].x,
-            fakeRadialCoordinates[7].y,
-            "I"
-        );
-        graph.appendChild(eighth.box);
-        graph.appendChild(eighth.text);
-   
-
+        const letters = [
+            "A", "B", "C", "D", "E", 
+            "F", "G", "H", "I", "J",
+            "K", "L", "M", "N", "O",
+            "P", "Q", "R", "S", "T",
+            "U", "V", "W", "X", "Y", "Z"
+        ];
         // let's test the fake radial coordinates maker
-        const n = 20;
+        const n = 24;
         for (let i = 0; i < n; i++) {
-          nextFakeRadialCoordinate(i);
-          
-          
+          const next = nextFakeRadialCoordinate(i);
+            console.log("next", next);
+        
+          const new_box = TextBox(next.x, next.y, letters[i]);
+          graph.appendChild(new_box.box);   
+          graph.appendChild(new_box.text);
         }
     </script>
   </body>
