@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body style="width: 100vw; height: 100vh; margin: 0">
+    <script>
+      const HEIGHT = 1000;
+      const WIDTH = 2000;
+      const CENTER_X = WIDTH / 2;
+      const CENTER_Y = HEIGHT / 2;
+
+      const BOX_WIDTH = 200;
+      const BOX_HEIGHT = 50;
+
+      const STROKE_COLOR = "black";
+      const STROKE_WIDTH = 2;
+      const BLUE = "#4a90e2";
+      const LIGHT_BLUE = "#20a0f3";
+      const FILL_COLOR = LIGHT_BLUE;
+      const TEXT_COLOR = "#333";
+
+      function Graph() {
+        const graph = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "svg"
+        );
+        graph.setAttribute("viewBox", `0 0 ${WIDTH} ${HEIGHT}`);
+        graph.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+
+        graph.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+        graph.style.border = "1px solid black";
+        graph.style.height = "98vh";
+
+        return graph;
+      }
+
+      function Box(x, y) {
+        // add a box to test the graph
+        const box = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "rect"
+        );
+
+        box.setAttribute("x", x);
+        box.setAttribute("y", y);
+        box.setAttribute("width", BOX_WIDTH);
+        box.setAttribute("height", BOX_HEIGHT);
+        box.setAttribute("fill", FILL_COLOR);
+        box.setAttribute("stroke", STROKE_COLOR);
+        box.setAttribute("stroke-width", STROKE_WIDTH);
+        return box;
+      }
+      function Text(x, y, textContent) {
+        const text = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "text"
+        );
+        text.setAttribute("x", x);
+        text.setAttribute("y", y);
+        text.setAttribute("fill", TEXT_COLOR);
+        text.textContent = textContent;
+        return text;
+      }
+
+      function TextBox(x, y, textContent) {
+        const box = Box(x, y);
+        const text = Text(x + 5, y + 30, textContent);
+        return { box, text };
+      }
+      const graph = Graph();
+      document.body.appendChild(graph);
+
+      const ROOT_X = CENTER_X - BOX_WIDTH / 2;
+      const ROOT_Y = CENTER_Y - BOX_HEIGHT / 2;
+      const rootBox = Box(ROOT_X, ROOT_Y);
+      graph.appendChild(rootBox);
+
+      const rootText = Text(ROOT_X + 5, ROOT_Y + 30, "A");
+      graph.appendChild(rootText);
+
+      const startNode = "A";
+      const nodes = [
+        { id: "A", next: new Set(["B", "C"]) },
+        { id: "B", next: new Set(["D", "E"]) },
+        { id: "C", next: new Set(["E", "F"]) },
+        { id: "D", next: new Set(["G"]) },
+        { id: "E", next: new Set(["G"]) },
+        { id: "F", next: new Set(["G"]) },
+        { id: "G", next: new Set([]) },
+      ];
+
+      const firstLevelChildren = nodes.find(
+        (node) => node.id === startNode
+      ).next;
+      console.log("firstLevelChildren", firstLevelChildren);
+      const numberOfFirstLevelChildren = firstLevelChildren.size;
+      console.log("numberOfFirstLevelChildren", numberOfFirstLevelChildren);
+
+      const firstChildrenCoordinates = [
+        { x: ROOT_X - BOX_WIDTH * 2, y: ROOT_Y }, // left of the root (only x and y)
+        { x: ROOT_X + BOX_WIDTH * 2, y: ROOT_Y }, // right of the root (only x and y)
+        { x: ROOT_X + BOX_WIDTH * 2, y: ROOT_Y + BOX_HEIGHT * 2 }, // below the root (only x and y)
+        { x: ROOT_X - BOX_WIDTH * 2, y: ROOT_Y - BOX_HEIGHT * 2 }, // above the root (only x and y)
+        { x: ROOT_X - BOX_WIDTH * 2, y: ROOT_Y + BOX_HEIGHT * 2 }, // below the root (only x and y)
+        { x: ROOT_X + BOX_WIDTH * 2, y: ROOT_Y - BOX_HEIGHT * 2 }, // above the root (only x and y)
+      ];
+
+      const first = TextBox(
+        firstChildrenCoordinates[0].x,
+        firstChildrenCoordinates[0].y,
+        "B"
+      );
+
+      graph.appendChild(first.box);
+      graph.appendChild(first.text);
+
+      const second = TextBox(
+        firstChildrenCoordinates[1].x,
+        firstChildrenCoordinates[1].y,
+        "C"
+      );
+
+      graph.appendChild(second.box);
+      graph.appendChild(second.text);
+
+      const third = TextBox(
+        firstChildrenCoordinates[2].x,
+        firstChildrenCoordinates[2].y,
+        "D"
+      );
+      graph.appendChild(third.box);
+      graph.appendChild(third.text);
+
+      const fourth = TextBox(
+        firstChildrenCoordinates[3].x,
+        firstChildrenCoordinates[3].y,
+        "E"
+      );
+      graph.appendChild(fourth.box);
+      graph.appendChild(fourth.text);
+    </script>
+  </body>
+</html>
