@@ -104,19 +104,19 @@ const App = () => {
         <defs>
           <marker
             id="arrowhead"
-            markerWidth="6"
-            markerHeight="6"
+            markerWidth="4"
+            markerHeight="4"
             refX="6"
-            refY="3"
+            refY="2"
             orient="auto"
             markerUnits="strokeWidth"
           >
             <path
-              d="M 0 0 L 6 3 L 0 6 Z"
+              d="M 0 0 L 4 2 L 0 4 Z"
               fill="white"
               stroke="white"
-              strokeWidth="0.5"
-              strokeLinejoin="round"
+              strokeWidth="0.2"
+             
             />
           </marker>
         </defs>
