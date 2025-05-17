@@ -50,8 +50,8 @@ const computeLayout = (nodes: Nodes, start: string): Record<string, LayoutNode> 
   }
 
   // Sort each level for consistent order, then assign index
-  for (const [levelStr, ids] of Object.entries(levels)) {
-    const level = parseInt(levelStr)
+  for (const [, ids] of Object.entries(levels)) {
+ 
     ids.sort() // optional: makes layout stable
     ids.forEach((id, i) => {
       layout[id].index = i
