@@ -145,7 +145,7 @@ function NodeGraph({ nodes }: { nodes: Node[] }) {
           })
         )}
 
-        {/* Nodes */}
+   
         {Object.values(layout).map((node) => {
           const { x, y } = getXY( {layout, node})
           return <Node key={node.id} coordinate={{x,y}} label={node.id} size={nodeSize} />
