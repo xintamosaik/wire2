@@ -42,18 +42,22 @@ const computeLayout = (nodes: Nodes, start: string): Record<string, LayoutNode> 
     }
   }
 
-  // Assign horizontal index per level
+  // Assign horizontal index per level (but centered)
   const levels: Record<number, string[]> = {}
   for (const node of Object.values(layout)) {
     levels[node.level] = levels[node.level] || []
     levels[node.level].push(node.id)
   }
 
-  for (const [_, ids] of Object.entries(levels)) {
+  // Sort each level for consistent order, then assign index
+  for (const [levelStr, ids] of Object.entries(levels)) {
+    const level = parseInt(levelStr)
+    ids.sort() // optional: makes layout stable
     ids.forEach((id, i) => {
       layout[id].index = i
     })
   }
+
 
   return layout
 }
@@ -77,10 +81,14 @@ const App = () => {
   const spacingY = 100
   const nodeSize = 30
 
-  const getXY = (node: LayoutNode) => ({
-    x: 100 + node.index * spacingX,
-    y: 50 + node.level * spacingY
-  })
+  const getXY = (node: LayoutNode) => {
+    const levelNodes = Object.values(layout).filter(n => n.level === node.level)
+    const totalWidth = (levelNodes.length - 1) * spacingX
+    const offsetX = (800 - totalWidth) / 2 // Center within 800px
+    const x = offsetX + node.index * spacingX
+    const y = 50 + node.level * spacingY
+    return { x, y }
+  }
 
   const svgHeight = Math.max(...Object.values(layout).map(n => n.level)) * spacingY + 100
 
@@ -96,15 +104,23 @@ const App = () => {
         <defs>
           <marker
             id="arrowhead"
-            markerWidth="10"
-            markerHeight="7"
-            refX="10"
-            refY="3.5"
+            markerWidth="6"
+            markerHeight="6"
+            refX="6"
+            refY="3"
             orient="auto"
+            markerUnits="strokeWidth"
           >
-            <polygon points="0 0, 10 3.5, 0 7" fill="white" />
+            <path
+              d="M 0 0 L 6 3 L 0 6 Z"
+              fill="white"
+              stroke="white"
+              strokeWidth="0.5"
+              strokeLinejoin="round"
+            />
           </marker>
         </defs>
+
 
         {/* Edges */}
         {Object.values(layout).flatMap((node) =>
@@ -152,9 +168,9 @@ const Node = ({ x, y, label, size }: { x: number; y: number; label: string; size
 const Edge = ({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: number }) => (
   <line
     x1={x1}
-    y1={y1}
+    y1={y1 + 20}
     x2={x2}
-    y2={y2}
+    y2={y2 - 20}
     stroke="white"
     strokeWidth={2}
     markerEnd="url(#arrowhead)"
