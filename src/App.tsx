@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import NodeGrid from "./components/NodeGrid.tsx";
 import NodeList from "./components/NodeList.tsx";
-import NodeGraph from "./components/NodeGraph.tsx";
+
 import type { Node } from "./types/Node.ts";
 import {
   saveNodesToLocalStorage,
@@ -78,8 +78,6 @@ function App() {
         links={links}
       ></ForceGraph>
 
-      <NodeGraph nodes={nodes}>
-      </NodeGraph>
 
 
     </>
