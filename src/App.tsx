@@ -25,6 +25,35 @@ function App() {
 
   const links = getLinks(nodes);
 
+  function isThereCyclicConnections(nodes: Node[]) {
+    const visited = new Set<string>();
+    const stack = new Set<string>();
+    const dfs = (node: Node): boolean => {  
+      if (stack.has(node.id)) return true; // Cycle detected
+      if (visited.has(node.id)) return false; // Already visited
+
+      visited.add(node.id);
+      stack.add(node.id);
+
+      for (const connection of node.connections) {
+        const connectedNode = nodes.find((n) => n.id === connection);
+        if (connectedNode && dfs(connectedNode)) {
+          return true;
+        }
+      }
+
+      stack.delete(node.id);
+      return false;
+    };
+
+    for (const node of nodes) {
+      if (dfs(node)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   function handleMark(id: string) {
     if (!markedNode) {
       setMarkedNode(id);
@@ -35,8 +64,9 @@ function App() {
       setMarkedNode(null);
       return;
     }
+    
 
-    const updated = nodes.map((entry) => {
+    const simulated = nodes.map((entry) => {
       if (markedNode === entry.id) {
         return {
           ...entry,
@@ -46,7 +76,13 @@ function App() {
       return entry;
     });
 
-    setNodes(updated);
+    const cyclicDetected = isThereCyclicConnections(simulated);
+    if (cyclicDetected) {
+      alert("Cyclic connection detected!");
+      return;
+    }
+
+    setNodes(simulated);
     setMarkedNode(null);
   }
   return (
