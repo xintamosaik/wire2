@@ -38,7 +38,7 @@ const computeLayout = (nodes: Node[], start: string): Record<string, LayoutNode>
     visited.add(id)
 
     const children = currentNode?.connections ? Array.from(currentNode.connections) : []
-
+  
 
     layout[id] = {
       id,
