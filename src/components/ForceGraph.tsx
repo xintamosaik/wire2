@@ -110,7 +110,7 @@ const ForceGraph: React.FC<Props> = ({ nodes, links }) => {
     }, [nodes, links]);
 
     return (
-        <svg ref={svgRef} width="2000" height="1000"  style={{border: "1px solid hotpink", margin: "1rem 0"}} />
+        <svg ref={svgRef} width="2000" height="1000"  style={{border: "1px solid hotpink", margin: "1rem 0", width: "100%"}} />
     );
 };
 
