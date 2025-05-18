@@ -39,7 +39,7 @@ const ForceGraph: React.FC<Props> = ({ nodes, links }) => {
             .attr("orient", "auto")
             .append("path")
             .attr("d", "M0,-5L10,0L0,5")
-            .attr("fill", "#aaa");
+            .attr("fill", "#a3e");
 
         const simulation = d3.forceSimulation<Node>(nodes)
             .force("link", d3.forceLink<Node, Link>(links).id(d => d.id).distance(120))
@@ -47,14 +47,14 @@ const ForceGraph: React.FC<Props> = ({ nodes, links }) => {
             .force("center", d3.forceCenter(width / 2, height / 2));
 
         const link = svg.append("g")
-            .attr("stroke", "#aaa")
+            .attr("stroke", "#a3e")
             .selectAll("line")
             .data(links)
             .join("line")
             .attr("marker-end", "url(#arrow)");
 
         const node = (svg.append("g")
-            .attr("stroke", "#fff")
+            .attr("stroke", "#3e3")
             .selectAll("circle")
             .data(nodes)
             .join("circle")
@@ -67,7 +67,11 @@ const ForceGraph: React.FC<Props> = ({ nodes, links }) => {
             .join("text")
             .text(d => d.id)
             .attr("text-anchor", "middle")
-            .attr("dy", -15);
+            .attr("dy", -15)
+            .attr("font-size", 12)
+            .attr("font-family", "sans-serif")
+            .attr("fill", "white")
+            
 
         simulation.on("tick", () => {
             link
@@ -106,7 +110,7 @@ const ForceGraph: React.FC<Props> = ({ nodes, links }) => {
     }, [nodes, links]);
 
     return (
-        <svg ref={svgRef} width="2000" height="1000"  style={{border: "1px solid black"}} />
+        <svg ref={svgRef} width="2000" height="1000"  style={{border: "1px solid hotpink", margin: "1rem 0"}} />
     );
 };
 
