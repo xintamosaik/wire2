@@ -68,7 +68,7 @@ const computeLayout = (nodes: Node[], start: string): Record<string, LayoutNode>
     levels[node.level].push(node.id)
   }
 
-  // Sort each level for consistent order, then assign index
+  // Sort each level for consistent order, then assign the index
   for (const [, ids] of Object.entries(levels)) {
 
     ids.sort() // optional: makes layout stable
@@ -84,7 +84,7 @@ const computeLayout = (nodes: Node[], start: string): Record<string, LayoutNode>
 const getXY = ({layout, node}:{layout: Record<string,LayoutNode>, node: LayoutNode}) => {
   const levelNodes = Object.values(layout).filter(n => n.level === node.level)
   const totalWidth = (levelNodes.length - 1) * spacingX
-  const offsetX = (800 - totalWidth) / 2 // Center within 800px
+  const offsetX = (800 - totalWidth) / 2 // Center within 800 px
   const x = offsetX + node.index * spacingX
   const y = 50 + node.level * spacingY
   return { x, y }
@@ -95,7 +95,7 @@ function NodeGraph({ nodes }: { nodes: Node[] }) {
 
   const start = nodes[0]?.id || ''
   const layout = computeLayout(nodes, start)
-  console.log('layout', layout) // {mam6lhoatcu9pnxu6jl: {…}, mam6lhoatcu9pnxu6jl: {…}, mam6lhoatcu9pnxu6jl: {…}, mam6lhoatcu9pnxu6jl: {…}}
+  console.log('layout', layout)
   const svgHeight = SvgHeight({ layout })
 
 
@@ -176,11 +176,7 @@ const Node = ({ coordinate, label, size }: { coordinate: Coordinate; label: stri
 
 
 
-/**
- * 
- * @param 
- * @returns 
- */
+
 const Edge = (line: Line) => (
   <line
     x1={line.start.x}

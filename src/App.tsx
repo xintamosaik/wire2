@@ -8,7 +8,9 @@ import {
   getLocalNodes,
   createEmptyNode,
   filterNodes,
+  getLinks,
 } from "./types/Nodes.ts";
+import ForceGraph from "./components/ForceGraph.tsx";
 
 function App() {
   const [nodes, setNodes] = useState<Node[]>(getLocalNodes());
@@ -20,6 +22,8 @@ function App() {
   }, [nodes]);
 
   const filteredNodes = filterNodes(filter, nodes);
+
+  const links = getLinks(nodes);
 
   function handleMark(id: string) {
     if (!markedNode) {
@@ -55,7 +59,7 @@ function App() {
         </button>
       </div>
 
-   
+
       <NodeList
         nodes={nodes}
         setFilter={setFilter}
@@ -68,11 +72,15 @@ function App() {
         markedNode={markedNode}
         handleMark={handleMark}
       ></NodeGrid>
-   
+
+      <ForceGraph
+        nodes={nodes}
+        links={links}
+      ></ForceGraph>
 
       <NodeGraph nodes={nodes}>
       </NodeGraph>
-      
+
 
     </>
   );

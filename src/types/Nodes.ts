@@ -43,6 +43,15 @@ function nodeIsConnected(nodes: Node[], id: string) {
     return nodes.some((node) => node.connections.has(id));
 }
 
+function getLinks(nodes: Node[]) {
+    const links: { source: string; target: string }[] = [];
+    nodes.forEach((node) => {
+        node.connections.forEach((connection) => {
+            links.push({ source: node.id, target: connection });
+        });
+    });
+    return links;
+}
 
 function filterNodes(filter: string, nodes: Node[]) {
     if (filter === "disconnected") {
@@ -59,6 +68,7 @@ export {
     getLocalNodes,
     generateUUID,
     createEmptyNode,
+    getLinks,
     nodeIsConnected,
     filterNodes,
 };
