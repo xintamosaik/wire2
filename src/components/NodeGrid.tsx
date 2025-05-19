@@ -11,14 +11,15 @@ function NodeGrid({
   handleMark: (id: string) => void;
 }) {
   return (
-    <section>
+    <section style={{  display: "flex", flexDirection: "column"  }}>
       <h1>Grid</h1>
 
       <div
         style={{
+          
           display: "grid",
           gap: "1rem",
-          gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
         }}
       >
         {nodes.map((node) => (
