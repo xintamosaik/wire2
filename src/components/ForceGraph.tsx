@@ -141,7 +141,7 @@ const ForceGraph: React.FC<Props> = ({ nodes, links }) => {
                 Reset Simulation
             </button>
         </div>
-        <svg ref={svgRef} width="2000" height="1000"  style={{border: "1px solid hotpink", margin: "1rem 0", width: "100%"}} />
+        <svg ref={svgRef} width="1000" height="1000"  style={{border: "1px solid hotpink", margin: "1rem 0", width: "100%"}} />
         </>
     );
 };
