@@ -57,7 +57,16 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
+  }
+}
+
+@media screen and (max-width: 600px) {
+
+  thead>tr>th:nth-child(3),
+  tbody>tr>td:nth-child(3) {
+    display: none;
   }
 }
