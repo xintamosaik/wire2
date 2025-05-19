@@ -11,17 +11,30 @@ function NodeCard({
 }) {
   const connections = node.connections.size;
   const disconnected = connections === 0;
+  function handleMouseEnter(e: React.MouseEvent<HTMLDivElement>) {
+    e.currentTarget.style.borderColor = "#646cff";
+  }
 
   const activeColor = disconnected ? "grey" : "white";
   const borderColor = markedNode === node.id ? "yellow" : activeColor;
+    function handleMouseLeave(e: React.MouseEvent<HTMLDivElement>) {
+    e.currentTarget.style.borderColor =  borderColor;
+  }
   const style = {
     fontFamily: "monospace",
     border: "1px solid " + borderColor,
     padding: "1rem",
     borderRadius: "5px",
+    cursor: "pointer",
   };
   return (
-    <div className="node" style={style} onClick={() => onMark(node.id)}>
+    <div 
+    className="node" 
+    style={style} 
+    onClick={() => onMark(node.id)}
+    onMouseEnter={handleMouseEnter}
+    onMouseLeave={handleMouseLeave}
+    >
       <h2 style={{ color: borderColor }}>{node.id}</h2>
       {disconnected ? (
         <h3 style={{ color: "grey" }}> No connections</h3>
